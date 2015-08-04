@@ -37,7 +37,6 @@ class SondeReader:
         self.ser.write('\r')
         self.ser.write('time\r')
 
-
         # read three lines of serial output because the
         # sonde provides output for terminal interfacing
         time = None 
@@ -47,12 +46,10 @@ class SondeReader:
         return time
 
 
-
     def readData(self):
         # flush any bad previous input
         self.ser.write('\r')
         self.ser.write('data\r')
-
 
         # read three lines of serial output because the
         # sonde provides output for terminal interfacing
@@ -69,12 +66,10 @@ class SondeReader:
             timeStamp = self.readTime()
             #remove newline
             timeStamp = timeStamp.rstrip()
-
             data = self.readData()
             data = data.replace(" ",",")
        
             #chop off the last comma
-        
             data = data[:-3]
 
         finally:
@@ -84,8 +79,6 @@ class SondeReader:
 
 class ReadManager:
     'Object responsible for scheduling reads from a Sonde and writing data'
-
-
     # frequency = readings per minute | duration = how long to record in minutes -1 would be forever
     def __init__(self, sonde, frequency = 5, file = os.popen("date +'%m_%d_%y'").readline().rstrip() + ".csv", duration = 1):
         self.frequency = frequency
@@ -136,9 +129,9 @@ class ReadManager:
             
             sender.sendto(MESSAGE, (ip, int(port)))
 
+
 # TODO: auto port selection
 mySonde = SondeReader('/dev/ttyUSB0')
-
 myReader = ReadManager(mySonde)
 
 try:
