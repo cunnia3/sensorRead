@@ -34,17 +34,17 @@ class Director:
     # Treat arguments to commands as an array that may only have 1 element
 
     def measurement_file_command(self, fileName):
-        print "dummy change record file to " + fileName[0]
+        self.myFileManager.setRecordFile(fileName[0])
 
     def log_file_command(self, fileName):
-        print "dummy change log file to " + fileName[0]
+        self.myFileManager.setLogFile(fileName[0])
 
     def goto_depth_command(self, depth):
         self.mySonde.goToDepth(depth[0])
 
     def record_measurements_command(self):
         data = self.mySonde.getData()
-        self.myFileManager.log(data)
+        self.myFileManager.record_measurements(data)
 
     def wait_command(self, secondsToWait):
         time.sleep(int(secondsToWait[0]))        
@@ -59,10 +59,10 @@ class Director:
         arguments = commandArray
         # if no arguments to command
         if len(arguments) == 0:
-            try:
-                self.commandDict[command]()         
-            except:
-                print "unable to execute command " + command        
+#            try:
+             self.commandDict[command]()         
+#            except:
+#                print "unable to execute command " + command        
         # if arguments to command
         else:
             try:
