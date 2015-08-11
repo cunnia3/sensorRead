@@ -1,23 +1,27 @@
 class FileManager:
     'manages writing data to files and loggign error messages'
     def __init__(self):
-        print "dummy file manager init"
-        self.recordFile = "test_record"
-        self.logFile = "test_log"    
+        self.recordFileName = "test_record"
+        self.recordFile = None
+        self.logFileName = "test_log"    
+        self.logFile = None
+        self.readyToWrite = False
 
     def setRecordFile(self, fileName):
-        self.recordFile = fileName
+        self.recordFileName = fileName
 
     def setLogFile(self, fileName):
-        self.logFile = fileName
+        self.logFileName = fileName
+
+    def getReadyToWrite(self):
+        self.logFile = open(self.logFileName, "w+")
+        self.recordFile = open(self.recordFileName, "w+")
+        self.readyToWrite = True
 
     def record_measurements(self, measurementString):
-        f = open(self.recordFile,"w+")
-        f.write(measurementString)
-        f.close()
-        self.log("Recorded measurement string")
+	if self.readyToWrite:
+            self.recordFile.write(measurementString)
 
     def log(self, logMessage):
-        f = open(self.logFile,"w+")
-        f.write(logMessage)
-        f.close()
+        if self.readyToWrite:
+            self.logFile.write(logMessage + "\n")

@@ -1,2 +1,5 @@
+start_profile
+wait 1
+record_measurements
 wait 1
 record_measurements

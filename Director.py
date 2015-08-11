@@ -1,4 +1,4 @@
-7# Author: Andrew Cunningham
+# Author: Andrew Cunningham
 # Email: andrew64ce@gmail.com
 # Description:  This module serves as a director for operation of the sonde
 #               system.  It contains an object that houses a command interface
@@ -26,6 +26,7 @@ class Director:
                             'goto_depth':self.goto_depth_command,
                             'record_measurements':self.record_measurements_command,
                             'wait':self.wait_command,
+                            'start_profile':self.start_profile,
                             'end_profile':self.end_profile_command}
     
     ################
@@ -41,13 +42,19 @@ class Director:
 
     def goto_depth_command(self, depth):
         self.mySonde.goToDepth(depth[0])
+        self.myFileManager.log("Accepted goto_depth command going to depth " + depth[0])
 
     def record_measurements_command(self):
         data = self.mySonde.getData()
         self.myFileManager.record_measurements(data)
+        self.myFileManager.log("Accepted record_measurements command")
 
     def wait_command(self, secondsToWait):
-        time.sleep(int(secondsToWait[0]))        
+        time.sleep(int(secondsToWait[0]))
+        self.myFileManager.log("Accepted wait command, waiting for " + secondsToWait[0])        
+
+    def start_profile(self):
+        self.myFileManager.getReadyToWrite()    
 
     def end_profile_command(self):
         print "dummy stopping profile"
