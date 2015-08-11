@@ -22,7 +22,7 @@ class SondeController:
         print "dummy initialized Sonde"
 
     def getData(self):
-        print "dummy line from getCSVLine"
+        return "dummy line from getCSVLine"
 
     def goToDepth(self, desiredDepth):
         print "dummy set depth to: " + desiredDepth
