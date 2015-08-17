@@ -1,5 +1,8 @@
 start_profile
-wait 1
 goto_depth .2
 wait 1
+record_measurements
 goto_depth 0
+wait 1
+record_measurements
+end_profile

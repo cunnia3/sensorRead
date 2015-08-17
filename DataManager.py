@@ -1,3 +1,6 @@
+import datetime
+import time
+
 class FileManager:
     'manages writing data to files and loggign error messages'
     def __init__(self):
@@ -24,4 +27,6 @@ class FileManager:
 
     def log(self, logMessage):
         if self.readyToWrite:
-            self.logFile.write(logMessage + "\n")
+            ts = time.time()
+            st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+            self.logFile.write(st + " " + logMessage + "\n")

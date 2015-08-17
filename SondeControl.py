@@ -23,17 +23,23 @@ class SondeController:
 
     def __init__(self, portIn = '/dev/ttyUSB0'):
         self.port = portIn
-        self.lock = threading.RLock()
+        self.virtualSonde = False
+
         
         # initialize the serial communication
-        self.ser = serial.Serial(
+        try:
+            self.ser = serial.Serial(
             port='/dev/ttyUSB0',
             baudrate=9600,
             parity=serial.PARITY_NONE,
             stopbits=serial.STOPBITS_ONE,
             bytesize=serial.EIGHTBITS,
             timeout=1)
-       
+        except:
+            print "No sonde detected, using virtual sonde"
+            self.virtualSonde = True       
+
+
 
     def readTime(self):
         #flush any bad previous input        
@@ -64,19 +70,15 @@ class SondeController:
 
 
     def getData(self):
-        self.lock.acquire()
-        try:
-            timeStamp = self.readTime()
-            #remove newline
-            timeStamp = timeStamp.rstrip()
-            data = self.readData()
-            data = data.replace(" ",",")
+        timeStamp = self.readTime()
+        #remove newline
+        timeStamp = timeStamp.rstrip()
+        data = self.readData()
+        data = data.replace(" ",",")
        
-            #chop off the last comma
-            data = data[:-3]
+        #chop off the last comma
+        data = data[:-3]
 
-        finally:
-            self.lock.release()
         return timeStamp + "," + data + "\n"
 
 

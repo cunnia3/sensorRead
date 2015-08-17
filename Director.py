@@ -57,7 +57,7 @@ class Director:
         self.myFileManager.getReadyToWrite()    
 
     def end_profile_command(self):
-        print "dummy stopping profile"
+        exit()
 
     # function accepts a command array and then executes it
     def run_command(self, commandRaw):
@@ -69,13 +69,13 @@ class Director:
 #            try:
              self.commandDict[command]()         
 #            except:
-#                print "unable to execute command " + command        
+#                 print "unable to execute command " + command        
         # if arguments to command
         else:
-#            try:
-            self.commandDict[command](arguments)
-#            except:
-#                print "unable to execute command " + command + " with arguments ",  arguments
+            try:
+                self.commandDict[command](arguments)
+            except:
+                print "unable to execute command " + command + " with arguments ",  arguments
 
 #How to call commands from a dictionary
 #myDirector.commandDict['readCommands']()
@@ -94,7 +94,9 @@ if len(sys.argv) > 1:
 # else there is no command file and work interactively
 else:
     input = ""
-    while input != 'q':
+    while 1==1:
         print "$:",
         input = raw_input()
+        if input == 'q' or input == 'exit' or input == 'quit':
+            break
         myDirector.run_command(input)
