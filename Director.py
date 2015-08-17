@@ -41,7 +41,7 @@ class Director:
         self.myFileManager.setLogFile(fileName[0])
 
     def goto_depth_command(self, depth):
-        self.mySonde.goToDepth(depth[0])
+        self.mySonde.goToDepth(float(depth[0]))
         self.myFileManager.log("Accepted goto_depth command going to depth " + depth[0])
 
     def record_measurements_command(self):
@@ -72,10 +72,10 @@ class Director:
 #                print "unable to execute command " + command        
         # if arguments to command
         else:
-            try:
-                self.commandDict[command](arguments)
-            except:
-                print "unable to execute command " + command + " with arguments ",  arguments
+#            try:
+            self.commandDict[command](arguments)
+#            except:
+#                print "unable to execute command " + command + " with arguments ",  arguments
 
 #How to call commands from a dictionary
 #myDirector.commandDict['readCommands']()

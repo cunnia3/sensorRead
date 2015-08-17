@@ -12,6 +12,8 @@ import os
 import time
 import threading
 import socket
+import roboclaw
+import math
 
 # This class handles all of the communication with
 # the sonde sensor
@@ -77,8 +79,25 @@ class SondeController:
             self.lock.release()
         return timeStamp + "," + data + "\n"
 
-    def goToDepth(self, desiredDepth):
-        print "dummy set depth to: " + desiredDepth
-        time.sleep(2)
-        print "done setting dummy depth"
+
+    def getCurrentDepth(self):
+        encoderCount = roboclaw.readM2encoder()[0]
+        return encoderCount/-8200.0 * .06 * math.pi  
+
+    def goToDepth(self,depth):
+        try:
+            # determine which way the winch should go
+            sign = cmp(self.getCurrentDepth() - depth,0)
+            # continue until the depth is passed by a little
+            while sign * -1 != cmp(self.getCurrentDepth() - depth,0):
+                    roboclaw.SetM2DutyAccel(1500,sign*-1*300)
+                    print "Current Depth: ", self.getCurrentDepth(), " Desired Depth: ", depth
+                    time.sleep(.1)
+
+            # stop the roboclaw
+            roboclaw.SetM2DutyAccel(1500,0)
+
+        except:
+            print "ERROR in reading encoders"
+            roboclaw.SetM2DutyAccel(1500,0)
 
