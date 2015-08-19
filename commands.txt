@@ -1,3 +1,5 @@
+measurement_file myData.csv
+log_file myLog.txt
 start_profile
 goto_depth .2
 wait 1

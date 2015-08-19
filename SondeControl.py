@@ -97,13 +97,26 @@ class SondeController:
     def goToDepth(self,depth):
         # determine which way the winch should go
         sign = cmp(self.getCurrentDepth() - depth,0)
+        start = time.time()
+
+        # safety feature to prevent winch from over extending
+        maxTime = abs(depth - self.lastDepth) / .2 * 11
+
         # continue until the depth is passed by a little
         while sign * -1 != cmp(self.getCurrentDepth() - depth,0):
             roboclaw.SetM2DutyAccel(1500,sign*-1*300)
             print "Current Depth: ", self.getCurrentDepth(), " Desired Depth: ", depth
+
+            # stop out of control winch
+            if time.time() - start > maxTime:
+                break
             time.sleep(.1)
 
         # stop the roboclaw
-        roboclaw.SetM2DutyAccel(1500,0)
-
+        print "Stopping roboclaw"
+        # send multiple stop commands to ensure that one is received
+        start = time.time()
+        while time.time() - start < .5:
+            roboclaw.SetM2DutyAccel(1500,0)
+            time.sleep(.1)
 
