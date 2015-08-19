@@ -5,4 +5,5 @@ record_measurements
 goto_depth 0
 wait 1
 record_measurements
+record_measurements
 end_profile
