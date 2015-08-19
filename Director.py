@@ -72,10 +72,10 @@ class Director:
 #                 print "unable to execute command " + command        
         # if arguments to command
         else:
-            try:
-                self.commandDict[command](arguments)
-            except:
-                print "unable to execute command " + command + " with arguments ",  arguments
+#            try:
+            self.commandDict[command](arguments)
+#            except:
+#                print "unable to execute command " + command + " with arguments ",  arguments
 
 #How to call commands from a dictionary
 #myDirector.commandDict['readCommands']()

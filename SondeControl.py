@@ -83,6 +83,8 @@ class SondeController:
 
 
     def getCurrentDepth(self):
+        # buffer requests with small wait time to avoid flooding roboclaw
+        time.sleep(.01)
         try:
             encoderCount = roboclaw.readM2encoder()[0]
             self.lastDepth = encoderCount/-8200.0 * .06 * math.pi              
@@ -102,15 +104,17 @@ class SondeController:
         # safety feature to prevent winch from over extending
         maxTime = abs(depth - self.lastDepth) / .2 * 11
 
+        currentDepth = self.getCurrentDepth()
         # continue until the depth is passed by a little
-        while sign * -1 != cmp(self.getCurrentDepth() - depth,0):
+        while sign * -1 != cmp(currentDepth - depth,0):
+            currentDepth = self.getCurrentDepth()
+            time.sleep(.1)
             roboclaw.SetM2DutyAccel(1500,sign*-1*300)
-            print "Current Depth: ", self.getCurrentDepth(), " Desired Depth: ", depth
+            print "Current Depth: ", currentDepth, " Desired Depth: ", depth
 
             # stop out of control winch
             if time.time() - start > maxTime:
                 break
-            time.sleep(.1)
 
         # stop the roboclaw
         print "Stopping roboclaw"
@@ -120,3 +124,4 @@ class SondeController:
             roboclaw.SetM2DutyAccel(1500,0)
             time.sleep(.1)
 
+        self.lastDepth = depth
