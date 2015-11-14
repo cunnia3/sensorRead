@@ -21,10 +21,11 @@ import math
 class SondeController:
     'Sonde communication handler'
 
-    def __init__(self, portIn = '/dev/ttyUSB0'):
+    def __init__(self, portIn = '/dev/ttyUSB0',  roboclawPort = '/dev/ttyACM0'):
         self.port = portIn
         self.virtualSonde = False
         self.lastDepth = 0
+        roboclaw.Open(roboclawPort,115200)
         
         # initialize the serial communication
         try:
@@ -86,12 +87,12 @@ class SondeController:
         # buffer requests with small wait time to avoid flooding roboclaw
         time.sleep(.01)
         try:
-            encoderCount = roboclaw.readM2encoder()[0]
+            encoderCount = roboclaw.ReadEncM1(0x80)[0]
             self.lastDepth = encoderCount/-8200.0 * .06 * math.pi              
 
         except:
             print "ERROR in reading encoders"
-            roboclaw.SetM2DutyAccel(1500,0)
+            roboclaw.DutyAccelM1(0x80, 1500,0)
 
         return self.lastDepth
 
@@ -109,7 +110,7 @@ class SondeController:
         while sign * -1 != cmp(currentDepth - depth,0):
             currentDepth = self.getCurrentDepth()
             time.sleep(.1)
-            roboclaw.SetM2DutyAccel(1500,sign*-1*300)
+            roboclaw.DutyAccelM1(0x80, 1500,sign*-1*300)
             print "Current Depth: ", currentDepth, " Desired Depth: ", depth
 
             # stop out of control winch
@@ -121,7 +122,7 @@ class SondeController:
         # send multiple stop commands to ensure that one is received
         start = time.time()
         while time.time() - start < .5:
-            roboclaw.SetM2DutyAccel(1500,0)
+            roboclaw.DutyAccelM1(0x80, 1500,0)
             time.sleep(.1)
 
         self.lastDepth = depth
