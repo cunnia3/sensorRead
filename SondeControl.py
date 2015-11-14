@@ -25,7 +25,12 @@ class SondeController:
         self.port = portIn
         self.virtualSonde = False
         self.lastDepth = 0
-        roboclaw.Open(roboclawPort,115200)
+        
+        try:
+            roboclaw.Open(roboclawPort,115200)
+        except:
+            print "Couldn't open roboclaw on port ",  roboclawPort
+            exit()
         
         # initialize the serial communication
         try:
@@ -43,6 +48,8 @@ class SondeController:
 
 
     def readTime(self):
+        if self.virtualSonde:
+            return -1
         #flush any bad previous input        
         self.ser.write('\r')
         self.ser.write('time\r')
@@ -57,6 +64,8 @@ class SondeController:
 
 
     def readData(self):
+        if self.virtualSonde:
+            return '1,2,3'
         # flush any bad previous input
         self.ser.write('\r')
         self.ser.write('data\r')
@@ -71,6 +80,8 @@ class SondeController:
 
 
     def getData(self):
+        if self.virtualSonde:
+            return '-1,1,2,3'
         timeStamp = self.readTime()
         #remove newline
         timeStamp = timeStamp.rstrip()
