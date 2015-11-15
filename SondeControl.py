@@ -98,8 +98,9 @@ class SondeController:
         # buffer requests with small wait time to avoid flooding roboclaw
         time.sleep(.01)
         try:
-            encoderCount = roboclaw.ReadEncM1(0x80)[0]
-            self.lastDepth = encoderCount/-8200.0 * .06 * math.pi              
+            encoderCount = roboclaw.ReadEncM1(0x80)[1]
+            print "encoderCount = ",  encoderCount
+            self.lastDepth = encoderCount/-820.0 * .06 * math.pi              
 
         except:
             print "ERROR in reading encoders"
@@ -121,7 +122,7 @@ class SondeController:
         while sign * -1 != cmp(currentDepth - depth,0):
             currentDepth = self.getCurrentDepth()
             time.sleep(.1)
-            roboclaw.DutyAccelM1(0x80, 1500,sign*-1*300)
+            roboclaw.DutyAccelM1(0x80, 4000,sign*9000)
             print "Current Depth: ", currentDepth, " Desired Depth: ", depth
 
             # stop out of control winch
@@ -133,7 +134,7 @@ class SondeController:
         # send multiple stop commands to ensure that one is received
         start = time.time()
         while time.time() - start < .5:
-            roboclaw.DutyAccelM1(0x80, 1500,0)
+            roboclaw.DutyAccelM1(0x80, 10000,0)
             time.sleep(.1)
 
         self.lastDepth = depth
