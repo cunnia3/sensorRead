@@ -19,6 +19,8 @@ import time
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(25, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
 # This class handles all of the communication with
@@ -101,6 +103,23 @@ class SondeController:
     # Read the mode switch to see which mode we are in FALSE = autonomous, TRUE = manual
     def inManualMode(self):
         return GPIO.input(18)
+
+
+    def manualMode(self):
+        # while we are in manual mode, accept button inputs to move winch
+        while self.inManualMode():
+            if GPIO.input(23):
+                roboclaw.DutyAccelM1(0x80, 5000,15000)
+            elif GPIO.input(25):
+                roboclaw.DutyAccelM1(0x80, 5000,-15000)
+            else:
+                roboclaw.DutyAccelM1(0x80, 30000,0) 
+
+        # reset encoders 
+        roboclaw.ResetEncoders(0x80)
+        roboclaw.DutyAccelM1(0x80, 30000,0)
+        return
+        
 
 
     def getCurrentDepth(self):

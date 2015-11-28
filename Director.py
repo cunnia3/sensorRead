@@ -41,17 +41,23 @@ class Director:
         self.myFileManager.setLogFile(fileName[0])
 
     def goto_depth_command(self, depth):
-        self.mySonde.goToDepth(float(depth[0]))
         self.myFileManager.log("Accepted goto_depth command going to depth " + depth[0])
+        self.mySonde.goToDepth(float(depth[0]))
 
     def record_measurements_command(self):
+        self.myFileManager.log("Accepted record_measurements command")
         data = self.mySonde.getData()
         self.myFileManager.record_measurements(data)
-        self.myFileManager.log("Accepted record_measurements command")
 
     def wait_command(self, secondsToWait):
-        time.sleep(int(secondsToWait[0]))
         self.myFileManager.log("Accepted wait command, waiting for " + secondsToWait[0])        
+        start = time.time()
+        # wait for specified time but stop waiting if manual mode was activated
+	while time.time() - start < int(secondsToWait[0]):
+            time.sleep(.1)
+            if self.mySonde.inManualMode():
+                self.myFileManager.log("Wait interrupted by manual mode")
+                return
 
     def start_profile(self):
         self.myFileManager.getReadyToWrite()    
@@ -92,8 +98,9 @@ if len(sys.argv) > 1:
 
 	# run manual control mode until button is 
         while myDirector.mySonde.inManualMode():
-            print "in manual mode"
-            time.sleep(.1)
+            print "Entering Manual Mode"
+            myDirector.myFileManager.log("Entering Manual Mode")
+            myDirector.mySonde.manualMode()
 
         myDirector.run_command(commandLine)
 
