@@ -6,6 +6,7 @@
 
 
 import time
+import datetime
 import sys
 from SondeControl import SondeController
 from DataManager import FileManager
@@ -26,6 +27,7 @@ class Director:
                             'goto_depth':self.goto_depth_command,
                             'record_measurements':self.record_measurements_command,
                             'wait':self.wait_command,
+                            'wait_until_time':self.wait_until_time_command,
                             'start_profile':self.start_profile,
                             'end_profile':self.end_profile_command}
     
@@ -58,6 +60,21 @@ class Director:
             if self.mySonde.inManualMode():
                 self.myFileManager.log("Wait interrupted by manual mode")
                 return
+
+
+    def wait_until_time_command(self, timeToWaitTo):
+        self.myFileManager.log("Accepted wait_until_time command, waiting till " + timeToWaitTo[0])
+	print timeToWaitTo
+        timeNow = datetime.datetime.fromtimestamp(time.time()).strftime('%H:%M:%S')
+        while timeNow < timeToWaitTo[0]:
+            time.sleep(.1)
+            timeNow = datetime.datetime.fromtimestamp(time.time()).strftime('%H:%M:%S')
+            if self.mySonde.inManualMode():
+                self.myFileManager.log("Wait interrupted by manual mode")
+                return
+
+
+
 
     def start_profile(self):
         self.myFileManager.getReadyToWrite()    
