@@ -14,6 +14,12 @@ import threading
 import socket
 import roboclaw
 import math
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
 
 # This class handles all of the communication with
 # the sonde sensor
@@ -59,7 +65,6 @@ class SondeController:
         time = None 
         for x in range(0, 3):
             time = self.ser.readline()
-           
         return time
 
 
@@ -74,14 +79,13 @@ class SondeController:
         # sonde provides output for terminal interfacing
         data = None 
         for x in range(0, 3):
-            data = self.ser.readline()
-           
+            data = self.ser.readline()           
         return data
 
 
     def getData(self):
         if self.virtualSonde:
-            return '-1,1,2,3'
+            return '-1,1,2,3\n'
         timeStamp = self.readTime()
         #remove newline
         timeStamp = timeStamp.rstrip()
@@ -92,6 +96,11 @@ class SondeController:
         data = data[:-3]
 
         return timeStamp + "," + data + "\n"
+
+
+    # Read the mode switch to see which mode we are in FALSE = autonomous, TRUE = manual
+    def inManualMode(self):
+        return GPIO.input(18)
 
 
     def getCurrentDepth(self):
@@ -120,9 +129,15 @@ class SondeController:
         currentDepth = self.getCurrentDepth()
         # continue until the depth is passed by a little
         while sign * -1 != cmp(currentDepth - depth,0):
+
+            # check to see if we are in manual mode before proceeding
+            if self.inManualMode():
+                roboclaw.DutyAccelM1(0x80, 30000,0)
+                return
+
             currentDepth = self.getCurrentDepth()
             time.sleep(.1)
-            roboclaw.DutyAccelM1(0x80, 4000,sign*9000)
+            roboclaw.DutyAccelM1(0x80, 4000,sign*-1*9000)
             print "Current Depth: ", currentDepth, " Desired Depth: ", depth
 
             # stop out of control winch

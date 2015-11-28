@@ -89,6 +89,12 @@ if len(sys.argv) > 1:
         commandLines = f.readlines()
 
     for commandLine in commandLines:
+
+	# run manual control mode until button is 
+        while myDirector.mySonde.inManualMode():
+            print "in manual mode"
+            time.sleep(.1)
+
         myDirector.run_command(commandLine)
 
 # else there is no command file and work interactively
