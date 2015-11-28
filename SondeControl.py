@@ -128,7 +128,8 @@ class SondeController:
         try:
             encoderCount = roboclaw.ReadEncM1(0x80)[1]
             print "encoderCount = ",  encoderCount
-            self.lastDepth = encoderCount/-820.0 * .06 * math.pi              
+            # calculate depth in meters
+            self.lastDepth = encoderCount/-4000.0 * .15 * math.pi              
 
         except:
             print "ERROR in reading encoders"
@@ -143,7 +144,7 @@ class SondeController:
         start = time.time()
 
         # safety feature to prevent winch from over extending
-        maxTime = abs(depth - self.lastDepth) / .2 * 11
+        maxTime = abs(depth - self.lastDepth) / .2 * 25
 
         currentDepth = self.getCurrentDepth()
         # continue until the depth is passed by a little
