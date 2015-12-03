@@ -23,10 +23,12 @@ class FileManager:
 
     def record_measurements(self, measurementString):
 	if self.readyToWrite:
+            print "Recorded: ", measurementString
             self.recordFile.write(measurementString)
 
     def log(self, logMessage):
         if self.readyToWrite:
             ts = time.time()
             st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+            print logMessage
             self.logFile.write(st + " " + logMessage + "\n")
