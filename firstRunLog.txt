@@ -1,0 +1,36 @@
+2015-12-03 16:25:12 Accepted goto_depth command going to depth 1
+2015-12-03 16:25:44 Accepted record_measurements command
+2015-12-03 16:25:46 Accepted wait command, waiting for 1
+2015-12-03 16:25:47 Accepted record_measurements command
+2015-12-03 16:25:48 Accepted wait command, waiting for 1
+2015-12-03 16:25:49 Accepted record_measurements command
+2015-12-03 16:25:49 Accepted wait command, waiting for 1
+2015-12-03 16:25:50 Accepted goto_depth command going to depth 2
+2015-12-03 16:26:19 Accepted record_measurements command
+2015-12-03 16:26:20 Accepted wait command, waiting for 1
+2015-12-03 16:26:21 Accepted record_measurements command
+2015-12-03 16:26:21 Accepted wait command, waiting for 1
+2015-12-03 16:26:22 Accepted record_measurements command
+2015-12-03 16:26:22 Accepted wait command, waiting for 1
+2015-12-03 16:26:23 Accepted goto_depth command going to depth 3
+2015-12-03 16:26:52 Accepted record_measurements command
+2015-12-03 16:26:52 Accepted wait command, waiting for 1
+2015-12-03 16:26:53 Accepted record_measurements command
+2015-12-03 16:26:54 Accepted wait command, waiting for 1
+2015-12-03 16:26:55 Accepted record_measurements command
+2015-12-03 16:26:55 Accepted wait command, waiting for 1
+2015-12-03 16:26:56 Accepted goto_depth command going to depth 4
+2015-12-03 16:27:24 Accepted record_measurements command
+2015-12-03 16:27:25 Accepted wait command, waiting for 1
+2015-12-03 16:27:26 Accepted record_measurements command
+2015-12-03 16:27:26 Accepted wait command, waiting for 1
+2015-12-03 16:27:27 Accepted record_measurements command
+2015-12-03 16:27:27 Accepted wait command, waiting for 1
+2015-12-03 16:27:28 Accepted goto_depth command going to depth 5
+2015-12-03 16:27:56 Accepted record_measurements command
+2015-12-03 16:27:56 Accepted wait command, waiting for 1
+2015-12-03 16:27:57 Accepted record_measurements command
+2015-12-03 16:27:58 Accepted wait command, waiting for 1
+2015-12-03 16:27:59 Accepted record_measurements command
+2015-12-03 16:27:59 Accepted wait command, waiting for 1
+2015-12-03 16:28:00 Accepted goto_depth command going to depth .5
