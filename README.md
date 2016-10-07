@@ -1,3 +1,5 @@
+This code was generated to control a water sampling device.  The water sampler consists of a mechanized winch, a raspberry pi, a cellular router, and a water quality sensor.  The code's function is as follows:
+
 1. **Director:** This file is responsible for interpreting commands.  Commands can either be run interactively or loaded in through a file.  It'll automatically enter interpreted if no file is specified at command line.  The Director object contains both the Data Manager and Sonde Control objects and accesses their methods as directed by the scripts commands.
 2. **Data Manager:**  This program is responsible for recording data to files and logging script history.  Not too much going on here.
 3. **Sonde Control:** This program is responsible for interfacing with the hardware (both the Sonde (which is a water sensor) and the Roboclaw (which is a motor controller))
